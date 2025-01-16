@@ -1,0 +1,161 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+
+    margin-top:10% ;
+  }
+  
+  .container {
+    display: flex;
+    margin-left: 10px;
+  }
+  
+  .sidebar {
+    background-color: #f9f9f9;
+    padding: 50px;
+    margin-left: 50px;
+    height : 400px;
+    border-radius: 20px;
+    width: 100%;
+    
+  }
+  
+  .profile {
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+  }
+  
+  .profile h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    width: 180%;
+    padding-right: 100px;
+    margin-left: 20px;
+  }
+  
+  .profile p {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    padding-left: 30px;
+    width: 230px;
+  }
+  
+  nav li {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  
+  nav li.active {
+    font-weight: bold;
+    color: #ff6600;
+
+  }
+  
+  nav li:hover {
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    padding-left: 20px;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  header input, header select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .orders {
+    text-align: center;
+    color: #999;
+    margin-left : 200px;
+  }
+  
+  .orders .empty img {
+    width: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .orders .empty button {
+    background-color: #ff6600;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  /* Styles for the form layout */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 300px;
+  }
+  
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input, select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  input[type="date"] {
+    color: #555;
+  }
+  
+  select {
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .search-item {
+    display: flex;
+    gap : 30px;
+  }
+
+  button.search-btn {
+    background-color: #ff9900;
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 50px;
+    margin-top: 20px;
+}
+
+button.search-btn:hover {
+    background-color: #e68900;
+}

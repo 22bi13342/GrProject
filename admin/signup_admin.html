@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Form</title>
+  <link rel="stylesheet" href="signup_admin.css">
+</head>
+<body>
+  <div class="signup-container">
+    <h2>Sign Up</h2>
+    <form method="POST" class="signup-form" id="signup-form">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="admin_name" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="admin_pass" required>
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm_pass" required>
+      </div>
+      <div id="signup-error"></div>
+      <button type="submit" class="signup-btn">Sign Up</button>
+      <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+
+  <script src="signup_admin.js"></script>
+</body>
+</html>

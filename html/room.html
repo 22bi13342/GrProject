@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/room.css">
+</head>
+
+<header>
+    <div class="menu-icon">☰</div> 
+    <ul class="nav">  
+        <li class = "page"><a href="hotel.html">Hotels</a></li>
+        <li class = "page"><a href="room.html">Rooms</a></li>
+        
+        <a href="homepage.html">
+            <img class="main-logo" src="https://vinpearl.com/themes/porto/images/new-homepage/vp-logo-blue.svg" alt="vinpearl" width="95" height="54">
+        </a>
+        
+        <li class = "page"><a href="aboutus.html">About</a></li>
+        <li class = "page"><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="header-actions">
+        <div id="nav-right" class = "right-nav" > 
+            <a href="login.html" class="login">Đăng nhập</a>
+            <span class="divider">/</span>
+            <a href="#" class="flag">🇻🇳</a>
+            <span class="lang">EN</span>
+        </div>
+    </div>
+</header>
+<body>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-item">
+            <label for="destination">Hotel & Location</label>
+            <div class="dropdown">
+                <div class="dropdown-btn" id="destination-btn">Choose Location</div>
+                <div class="dropdown-content" id="destination-options">
+                    <div class="dropdown-group">
+                        <strong>Phú Quốc</strong>
+                        <p>Vinpearl Wonderworld Phú Quốc</p>
+                        <p>Vinpearl Resort & Spa Phú Quốc</p>
+                        <p>VinHolidays Fiesta Phú Quốc</p>
+                    </div>
+                    <div class="dropdown-group">
+                        <strong>Nha Trang</strong>
+                        <p>Vinpearl Resort & Spa Nha Trang Bay</p>
+                        <p>Vinpearl Luxury Nha Trang</p>
+                        <p>Vinpearl Resort Nha Trang</p>
+                        <p>Vinpearl Beachfront Nha Trang</p>
+                        <p>Hòn Tằm Resort</p>
+                    </div>
+                    <div class="dropdown-group">
+                        <strong>Hội An</strong>
+                        <p>Vinpearl Resort & Golf Nam Hội An</p>
+                    </div>
+                    <div class="dropdown-group">
+                        <strong>Đà Nẵng</strong>
+                        <p>Vinpearl Resort & Spa Đà Nẵng</p>
+                    </div>
+                    <div class="dropdown-group">
+                        <strong>Hạ Long</strong>
+                        <p>Vinpearl Resort & Spa Hạ Long</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-item">
+            <label for="checkin">Check in</label>
+            <input type="date" id="checkin" name="checkin">
+        </div>
+
+        <div class="search-item">
+            <label for="checkout">Check out</label>
+            <input type="date" id="checkout" name="checkout">
+        </div>
+
+
+        <div class="search-item">
+            <button type="submit" class="search-btn">Search</button>
+        </div>
+    </div>
+
+    <div class="room-list" id="room-list"></div>
+
+    <script src = "../js/script.js"></script>
+    <script src = "../js/room.js"></script>
+    
+</body>
+</html>

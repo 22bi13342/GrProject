@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="content">
+                <h1>Kết nối giá trị - Trải nghiệm tinh hoa cùng VinClub</h1>
+                <p>Đặc quyền ưu việt dành riêng cho thành viên khi trải nghiệm sản phẩm và dịch vụ trong hệ sinh thái toàn diện của Tập đoàn Vingroup.</p>
+            </div>
+        </div>
+        <div class="right-section">
+            <h1>Register</h1>
+            <div class="tab-content" id="signup">
+                <div style="color: red;" id="signup-error"></div>
+                <form id="signup-form">
+                    <input id="email" type="text" name="email" placeholder="Email" required>
+                    <input type="text" name="firstName" placeholder="Họ" required>
+                    <input type="text" name="lastName" placeholder="Tên đệm và tên" required>
+                    <input type="password" name="password" placeholder="Mật khẩu" required>
+                    <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                    <button type="submit" class="signup-btn">Đăng ký</button>
+                    <div id="otp-container" style="display:none;">
+                        <input type="text" id="otp" name="otp" placeholder="Enter OTP" />
+                        <button type="button" class="signup-btn" onclick="verifyOtpSignup()">Verify OTP</button>
+                    </div>
+                </form>
+                <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="../js/signup.js"></script>
+</body>
+</html>

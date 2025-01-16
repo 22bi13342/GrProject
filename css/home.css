@@ -1,0 +1,188 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+}
+ul {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+header {
+    position: fixed; /* Keeps the header visible at all times */
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    padding: 20px 40px; /* Adjusted for better alignment */
+    z-index: 10; /* Ensures header is above all other elements */
+}
+
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    padding-left: 15%;
+}
+
+.nav {
+    display: flex;
+    gap: 60px; 
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; 
+}
+
+.main-logo {
+    width: 95px;
+    height: 54px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-direction: column;
+    padding-right: 15%;
+}
+
+.book-now {
+    padding: 8px 20px;
+    background-color: orange;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.box {
+    position: relative;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+    text-align: center;
+}
+
+.box video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Keeps video behind other elements */
+    pointer-events: none; /* Prevents video from blocking clicks */
+}
+
+.content {
+    padding-left: 20%;
+    position: relative;
+    z-index: 1;
+    text-align: left;
+}
+
+.content h1 {
+    margin-bottom: 30px;
+    font-size: 60px;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.content h3 {
+    margin-bottom: 40px;
+    font-size: 24px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.content .boxBtn {
+    padding: 12px 30px;
+    background: transparent;
+    color: #fff;
+    font-size: 18px;
+    border: 2px solid #fff;
+    transition: all .3s ease;
+}
+
+.content .boxBtn:hover {
+    background: #fff;
+    color: #000;
+}
+
+ /* Dropdown container */
+ .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown trigger text */
+  .drop-text {
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .drop-text:hover {
+    color: #ff9800;
+  }
+  
+  /* Dropdown content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    right: 0; /* Align dropdown to the right */
+  }
+  
+  .dropdown-content a {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f1f1;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .dropdown-content a:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #f9f9f9;
+    color: #ff9800;
+  }
+  
+  /* Show dropdown */
+  .dropdown-content.show {
+    display: block;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .drop-text {
+        font-size: 14px;
+    }
+  
+    .dropdown-content {
+        min-width: 140px;
+    }
+  }
+  
