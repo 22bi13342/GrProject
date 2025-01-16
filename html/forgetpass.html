@@ -19,19 +19,28 @@
             <div class="tab-content" id="login">
                 <div style="color: red;" id="login-error"></div>
                 <form id="loginForm">
-                    <input type="text" id="email" name="email" placeholder="Email" >
-                    <input type="password" id="password" name="password" placeholder="Password" >
-                    <button type="submit" class="login-btn">Đăng nhập</button>
-                    <div id="otp-container" style="display:none;">
-                        <input type="text" id="otp" name="otp" placeholder="Enter OTP"  />
-                        <button type="button" class="login-btn" onclick="verifyOtp()">Verify OTP</button>
+                    <div id="email-container">
+                        <input type="text" id="email" name="email" placeholder="Email" >
+                        <button type="submit" class="login-btn">Send OTP</button>
                     </div>
+
+                    <div id="otp-container" style="display:none;">
+                        <input type="text" id="otp" name="otp" placeholder="Enter OTP" >
+                        <button type="button" class="login-btn" onclick="verifyOtpForPasswordReset()">Verify OTP</button>
+                    </div>
+
+                    <div id="password-container" style="display:none;">
+                        <input type="password" id="password" name="password" placeholder="New Password" >
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password" >
+                        <button type="button" class="login-btn" onclick="resetPassword()">Reset Password</button>
+                    </div>
+
+
                 </form>
-                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-                <p>Forger password? <a href="forgetpass.html">Forget Password</a></p>
+            <p>Login <a href="login.html">Login</a></p>
             </div>
         </div>
     </div>
-    <script src="../js/login.js"></script>
+    <script src="../js/forget.js"></script>
 </body>
 </html>
