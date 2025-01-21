@@ -142,7 +142,7 @@ async function cancelBooking(bookingId) {
 
 async function payBooking(bookingId) {
     try {
-        const response = await fetch(`/api/vnpay/initiate-payment`, {
+        const response = await fetch(`/api/vnpay/create-payment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

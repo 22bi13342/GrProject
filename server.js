@@ -465,14 +465,14 @@ function sortObject(obj) {
             return result;
         }, {});
 }
-app.post("/api/vnpay/initiate-payment", async (req, res) => {
+app.post("/api/vnpay/create-payment", async (req, res) => {
     const { booking_id } = req.body;
 
     // VNPay configuration
     const vnp_TmnCode = "HNWZVBYT";
     const vnp_HashSecret = "DQ1OUR25C7K1KYSA4GE4VV65RGOA8YRH";
     const vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    const vnp_ReturnUrl = "http://localhost:3000/api/vnpay/callback";
+    const vnp_ReturnUrl = "http://localhost:3000/api/vnpay/return";
 
     // Fetch booking details from your DB
     const booking = await getBookingDetails(booking_id);
@@ -522,7 +522,7 @@ app.post("/api/vnpay/initiate-payment", async (req, res) => {
     res.json({ paymentUrl });
 });
 
-app.get("/api/vnpay/callback", async (req, res) => {
+app.get("/api/vnpay/return", async (req, res) => {
     const vnp_HashSecret = "DQ1OUR25C7K1KYSA4GE4VV65RGOA8YRH";
     const queryParams = req.query;
     const vnp_SecureHash = queryParams["vnp_SecureHash"];

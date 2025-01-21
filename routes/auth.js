@@ -112,16 +112,23 @@ router.post('/verify-signup', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-    const { email } = req.body;
+    const { email, password } = req.body;
 
-    if (!email) {
-        return res.status(400).json({ message: 'Email is required.' });
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required.' });
     }
 
     try {
         const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         if (rows.length === 0) {
             return res.status(400).json({ message: 'Email not found.' });
+        }
+
+        const user = rows[0];
+        // Verify the password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(400).json({ message: 'Incorrect password.' });
         }
 
         // Generate OTP and send it via email

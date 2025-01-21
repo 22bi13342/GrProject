@@ -68,7 +68,7 @@ function loadMessages() {
             messagesDiv.innerHTML = ''; // Clear previous messages
             messages.forEach((msg) => {
                 const div = document.createElement('div');
-                div.className = `message ${msg.senderId === adminId ? 'sent' : 'received'}`;
+                div.className = `message ${msg.senderType === 'admin' ? 'sent' : 'received'}`;
                 div.textContent = msg.message;
                 messagesDiv.appendChild(div);
             });
@@ -84,7 +84,7 @@ socket.on('receiveMessage', (data) => {
     // Ensure the message is meant for the active user
     if (data.senderId === activeUserId || data.receiverId === activeUserId) {
         const div = document.createElement('div');
-        div.className = `message ${data.senderId === 'admin' ? 'sent' : 'received'}`;
+        div.className = `message ${data.senderType === 'admin' ? 'sent' : 'received'}`;
         div.textContent = data.message;
         messagesDiv.appendChild(div);
         messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to the bottom
