@@ -96,7 +96,9 @@ function displayBookings(bookings) {
                     </p>
                     ${
                         booking.status === "success"
-                            ? `<button class="btn btn-danger btn-sm" onclick="cancelBooking(${booking.booking_id})">Cancel</button>`
+                            ? `
+                            <button class="btn btn-secondary btn-sm mb-2" onclick="showReviewForm(${booking.booking_id})">Review</button>
+                            <button class="btn btn-danger btn-sm" onclick="cancelBooking(${booking.booking_id})">Cancel</button>`
                             : booking.status === "pending"
                             ? `<button class="btn btn-success btn-sm" onclick="payBooking(${booking.booking_id})">Pay</button>`
                             : ""
@@ -158,5 +160,62 @@ async function payBooking(bookingId) {
         }
     } catch (error) {
         console.error("Error initiating payment:", error);
+    }
+}
+
+function showReviewForm(bookingId) {
+    const ordersDiv = createOrdersDivIfMissing();
+    const reviewFormDiv = document.createElement("div");
+    reviewFormDiv.classList.add("review-form");
+    reviewFormDiv.style.marginTop = "10px";
+    reviewFormDiv.innerHTML = `
+        <div class="card p-3" style="width: 80%; max-width: 900px; ">
+            <h5 class="card-title">Leave a Review</h5>
+            <form id="reviewForm" onsubmit="submitReview(event, ${bookingId})">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating (1-5)</label>
+                    <select id="rating" class="form-select" required>
+                        <option value="" disabled selected>Select Rating</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="review" class="form-label">Review</label>
+                    <textarea id="review" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelReviewForm()">Cancel</button>
+            </form>
+        </div>
+    `;
+    ordersDiv.appendChild(reviewFormDiv);
+}
+
+async function submitReview(event, bookingId) {
+    event.preventDefault();
+    const rating = document.getElementById("rating").value;
+    const review = document.getElementById("review").value;
+
+    try {
+        const response = await fetch(`/api/review`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ booking_id: bookingId, rating, review }),
+        });
+
+        if (response.ok) {
+            alert("Review submitted successfully!");
+            location.reload(); // Reload to update the status
+        } else {
+            alert("Failed to submit review.");
+        }
+    } catch (error) {
+        console.error("Error submitting review:", error);
     }
 }

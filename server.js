@@ -106,7 +106,10 @@ app.get('/get-messages', async (req, res) => {
 
     try {
         // Fetch messages from Redis
+        const start = Date.now();
         const redisMessages = await redisClient.lRange(chatKey, 0, -1);
+        const end = Date.now();
+        console.log(`Redis Read Time: ${end - start}ms`);
         const parsedRedisMessages = redisMessages.map((msg) => {
             try {
                 return JSON.parse(msg);
@@ -244,35 +247,80 @@ app.get('/api/hotels', async (req, res) => {
 });
 
 app.get("/api/rooms", async (req, res) => {
-    const { hotelId } = req.query;
+    const { hotelId, checkInDate, checkOutDate } = req.query;
 
-    if (!hotelId) {
-        return res.status(400).json({ error: "Hotel ID is required." });
+    if (!hotelId || !checkInDate || !checkOutDate) {
+        return res.status(400).json({ error: "Hotel ID, check-in, and check-out dates are required." });
     }
 
     try {
         const query = `
             SELECT 
-                RoomID, RoomName, PricePerNight, MaxOccupancy, AvailableRooms 
+                r.RoomID, r.RoomName, r.PricePerNight, r.MaxOccupancy,
+                COALESCE(
+                    (SELECT MIN(ar.available_quantity) 
+                     FROM available_rooms ar 
+                     WHERE ar.room_id = r.RoomID 
+                     AND ar.date BETWEEN ? AND ?), 
+                10) AS AvailableRooms
             FROM 
-                rooms 
+                rooms r
             WHERE 
-                HotelID = ? AND AvailableRooms > 0`;
+                r.HotelID = ?`;
 
-        // Execute the query with the provided hotelId
-        const [rooms] = await db.query(query, [hotelId]);
+        const [rooms] = await db.query(query, [checkInDate, checkOutDate, hotelId]);
 
-        // If rooms were found, return them as a JSON response
-        if (rooms.length > 0) {
-            res.json(rooms);
-        } else {
-            res.json({ message: "No available rooms for this hotel." });
+        // Fetch images for each room
+        for (const room of rooms) {
+            const [images] = await db.query("SELECT image_url FROM room_images WHERE room_id = ?", [room.RoomID]);
+            room.Images = images.map(img => img.image_url);
         }
+
+        res.json(rooms);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to fetch rooms." });
     }
 });
+
+app.get("/api/room_details", async (req, res) => {
+    const { roomId } = req.query;
+
+    if (!roomId) {
+        return res.status(400).json({ error: "Room ID is required." });
+    }
+
+    try {
+        const roomQuery = `
+            SELECT RoomID, RoomName, description 
+            FROM rooms WHERE RoomID = ?`;
+
+        const facilityQuery = `
+            SELECT facility_name FROM room_facilities WHERE room_id = ?`;
+
+        const imageQuery = `
+            SELECT image_url FROM room_images WHERE room_id = ?`;
+
+        const [room] = await db.query(roomQuery, [roomId]);
+        if (!room.length) {
+            return res.status(404).json({ error: "Room not found." });
+        }
+
+        const [facilities] = await db.query(facilityQuery, [roomId]);
+        const [images] = await db.query(imageQuery, [roomId]);
+
+        res.json({
+            RoomName: room[0].RoomName,
+            description: room[0].description,
+            facilities: facilities.map(fac => fac.facility_name),
+            Images: images.map(img => img.image_url),
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to fetch room details." });
+    }
+});
+
 
 async function ensureRoomAvailability(roomId, startDate, endDate) {
     const dates = getDatesBetween(startDate, endDate);
@@ -307,6 +355,45 @@ function getDatesBetween(startDate, endDate) {
     }
     return dates;
 }
+
+app.post("/review", async (req, res) => {
+    const { booking_id, rating, review } = req.body;
+
+    // Validate the input
+    if (!booking_id || typeof rating === "undefined" || !review) {
+        return res.status(400).json({ message: "booking_id, rating, and review are required." });
+    }
+
+    if (rating < 1 || rating > 5) {
+        return res.status(400).json({ message: "Rating must be between 1 and 5." });
+    }
+
+    try {
+        // Business logic (e.g., check booking exists, status is 'success', etc.)
+        const booking = await db.query("SELECT * FROM bookings WHERE booking_id = ?", [booking_id]);
+
+        if (!booking.length) {
+            return res.status(404).json({ message: "Booking not found." });
+        }
+
+        if (booking[0].status !== "success") {
+            return res.status(400).json({ message: "Only completed bookings can be reviewed." });
+        }
+
+        // Update review in database
+        const reviewQuery = `
+            UPDATE bookings 
+            SET rating = ?, review = ? 
+            WHERE booking_id = ?
+        `;
+        await db.query(reviewQuery, [rating, review, booking_id]);
+
+        res.status(200).json({ message: "Review submitted successfully!" });
+    } catch (error) {
+        console.error("Error submitting review:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+});
 
 // Booking endpoint
 app.post("/api/bookings", async (req, res) => {

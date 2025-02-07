@@ -51,8 +51,8 @@ function loadHotels() {
 }
 
 // Fetch rooms for the selected hotel
-function fetchRooms(hotelId) {
-    const url = `http://localhost:3000/api/rooms?hotelId=${hotelId}`;
+function fetchRooms(hotelId, checkInDate, checkOutDate) {
+    const url = `http://localhost:3000/api/rooms?hotelId=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
     fetch(url)
         .then((response) => response.json())
         .then((rooms) => {
@@ -68,17 +68,34 @@ function fetchRooms(hotelId) {
                 const roomCard = document.createElement("div");
                 roomCard.className = "room-card";
                 roomCard.innerHTML = `
-                    <h3>${room.RoomName}</h3>
-                    <p>Price per night: ${room.PricePerNight.toLocaleString()} VND</p>
-                    <p>Max Occupancy: ${room.MaxOccupancy} people</p>
-                    <p>Available Rooms: ${room.AvailableRooms}</p>
-                    <button class="book-now-btn" 
-                        data-room-id="${room.RoomID}" 
-                        data-price-per-night="${room.PricePerNight}">
-                        Book Now
-                    </button>
+                    <div class="room-content">
+                        <div class="carousel">
+                            ${room.Images.map((img, index) => `
+                                <div class="carousel-item${index === 0 ? ' active' : ''}">
+                                    <img src="${img}" alt="Room Image ${index + 1}" />
+                                </div>
+                            `).join('')}
+                            <button class="carousel-prev">&#10094;</button>
+                            <button class="carousel-next">&#10095;</button>
+                        </div>
+                        <div class="room-details">
+                            <h3>${room.RoomName}</h3>
+                            <p>Price per night: ${room.PricePerNight.toLocaleString()} VND</p>
+                            <p>Max Occupancy: ${room.MaxOccupancy} people</p>
+                            <p>Available Rooms: ${room.AvailableRooms}</p>
+                            <p class = "detail" data-room-id="${room.RoomID}">Room Detail > </p>
+                            <button class="book-now-btn" data-room-id="${room.RoomID}" data-price-per-night="${room.PricePerNight}">Book Now</button>
+                        </div>
+                    </div>
                 `;
                 roomList.appendChild(roomCard);
+
+                initCarousel(roomCard);
+
+                roomCard.querySelector(".detail").addEventListener("click", function () {
+                    const roomId = this.dataset.roomId;
+                    fetchRoomDetails(roomId);
+                });
 
                 roomCard.querySelector(".book-now-btn").addEventListener("click", function () {
                     const roomId = this.dataset.roomId;
@@ -120,6 +137,32 @@ function fetchRooms(hotelId) {
         })
         .catch((error) => console.error("Error fetching rooms:", error));
 }
+
+function initCarousel(roomCard) {
+    const items = roomCard.querySelectorAll(".carousel-item");
+    const prevButton = roomCard.querySelector(".carousel-prev");
+    const nextButton = roomCard.querySelector(".carousel-next");
+    let currentIndex = 0;
+
+    function updateCarousel() {
+        items.forEach((item, index) => {
+            item.classList.toggle("active", index === currentIndex);
+        });
+    }
+
+    prevButton.addEventListener("click", () => {
+        currentIndex = (currentIndex === 0) ? items.length - 1 : currentIndex - 1;
+        updateCarousel();
+    });
+
+    nextButton.addEventListener("click", () => {
+        currentIndex = (currentIndex === items.length - 1) ? 0 : currentIndex + 1;
+        updateCarousel();
+    });
+
+    updateCarousel();
+}
+
 // Create a booking
 function createBooking(userId, roomId, checkInDate, checkOutDate, totalPrice) {
     const bookingData = {
@@ -139,7 +182,7 @@ function createBooking(userId, roomId, checkInDate, checkOutDate, totalPrice) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                alert("Booking successful!");
+                alert("Booking successful!. Please direct to profile to finish payment");
             } else {
                 alert("Failed to book room. Please try again.");
             }
@@ -156,11 +199,90 @@ document.addEventListener("DOMContentLoaded", () => {
 document.querySelector(".search-btn").addEventListener("click", function (e) {
     e.preventDefault();
 
-    console.log("Selected Hotel ID before search:", selectedHotelId);
+    const checkInDate = document.getElementById("checkin").value;
+    const checkOutDate = document.getElementById("checkout").value;
 
     if (!selectedHotelId) {
         alert("Please select a hotel.");
-    } else {
-        fetchRooms(selectedHotelId);
+        return;
     }
+    
+    if (!checkInDate || !checkOutDate) {
+        alert("Please select both check-in and check-out dates.");
+        return;
+    }
+
+    if (new Date(checkOutDate) <= new Date(checkInDate)) {
+        alert("Checkout date must be later than the check-in date.");
+        return;
+    }
+
+    console.log("Fetching rooms with date filter:", checkInDate, checkOutDate);
+
+    fetchRooms(selectedHotelId, checkInDate, checkOutDate);
 });
+
+function openRoomDetailModal(room) {
+    const modal = document.getElementById("room-detail-modal");
+    document.getElementById("modal-room-name").textContent = room.RoomName;
+    document.getElementById("modal-room-description").textContent = room.description;
+
+    // Populate image carousel
+    const carouselContainer = document.getElementById("modal-room-carousel");
+    carouselContainer.innerHTML = ""; // Clear previous images
+
+    room.Images.forEach((img, index) => {
+        const imgElement = document.createElement("img");
+        imgElement.src = img;
+        imgElement.classList.add("carousel-image");
+        if (index === 0) imgElement.classList.add("active");
+        carouselContainer.appendChild(imgElement);
+    });
+
+    // Populate facilities
+    const facilitiesList = document.getElementById("modal-room-facilities");
+    facilitiesList.innerHTML = "";
+    room.facilities.forEach((facility) => {
+        const li = document.createElement("li");
+        li.textContent = facility;
+        facilitiesList.appendChild(li);
+    });
+
+    // Show modal
+    modal.style.display = "flex";
+
+    // Close modal on click
+    document.querySelector(".close").addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    // Carousel logic
+    let currentIndex = 0;
+    const images = document.querySelectorAll(".carousel-image");
+
+    function updateCarousel() {
+        images.forEach((img, index) => {
+            img.classList.toggle("active", index === currentIndex);
+        });
+    }
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+        currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+        updateCarousel();
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+        currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+        updateCarousel();
+    });
+}
+
+// Fetch room details function (Ensure this is ABOVE fetchRooms)
+function fetchRoomDetails(roomId) {
+    fetch(`http://localhost:3000/api/room_details?roomId=${roomId}`)
+        .then((response) => response.json())
+        .then((room) => {
+            openRoomDetailModal(room);
+        })
+        .catch((error) => console.error("Error fetching room details:", error));
+}

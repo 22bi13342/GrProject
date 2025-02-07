@@ -395,3 +395,16 @@ span.trip-ad-dot-outer {
     object-fit: cover;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+button {
+    background-color: orange;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.modify-hotel {
+    margin-top: 90px;
+    margin-left: 380px;
+}

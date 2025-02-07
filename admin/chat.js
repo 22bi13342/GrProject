@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h4>${user.first_name} ${user.last_name}</h4>
                         <p>Click to chat</p>
                     </div>
-                    <div class="timestamp">10:15</div>`;
+                    <div class="timestamp"></div>`;
                 li.addEventListener('click', () => {
                     activeUserId = user.id;
                     chatHeader.textContent = `Chat with ${user.first_name} ${user.last_name}`;

@@ -7,6 +7,11 @@
     
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="manage_user.css">
+    <link rel="stylesheet" href="booking.css">
+    <link rel="stylesheet" href="room.css">
+
     
 </head>
 <body>
@@ -18,39 +23,90 @@
                     <li><a href="#" data-tab="dashboard">Dashboard</a></li>
                     <li><a href="#" data-tab="bookings">Bookings</a></li>
                     <li><a href="#" data-tab="users">Users</a></li>
-                    <li><a href="#" data-tab="queries">User Queries</a></li>
                     <li><a href="#" data-tab="hotel">Hotel</a></li>
                     <li><a href="#" data-tab="rooms">Rooms</a></li>
-                    <li><a href="#" data-tab="facilities">Features & Facilities</a></li>
                     <li><a href="#" data-tab="chat">Chat</a></li>
-                    <li><a href="#" data-tab="settings">Settings</a></li>
                 </ul>
             </nav>
-            <button class="logout">Log Out</button>
         </aside>
         <main class="content">
+
             <section id="dashboard" class="tab-content active">
-                <h2>Dashboard</h2>
-                <p>Welcome to the dashboard.</p>
+                <h2>Analystic</h2>
+                <label>Filter by: </label>
+                <select id="filterDropdown">
+                    <option value="7">Past 7 Days</option>
+                    <option value="30" selected>Past 30 Days</option>
+                    <option value="90">Past 90 Days</option>
+                </select>
+
+                <h2>Booking Statistics</h2>
+                <div class="analytics">
+                    <div class="card">
+                        <div>Total Bookings</div>
+                        <span id="totalBookings">0</span>
+                    </div>
+                    <div class="card">
+                        <div>Recent Bookings</div>
+                        <span id="recentBookings">0</span>
+                    </div>
+                    <div class="card">
+                        <div>Successful Bookings</div>
+                        <span id="successBookings">0</span>
+                    </div>
+                    <div class="card">
+                        <div>Canceled Bookings</div>
+                        <span id="canceledBookings">0</span>
+                    </div>
+                    <div class="card">
+                        <div>Revenue</div>
+                        <span id="totalRevenue">₹0</span>
+                    </div>
+                </div>
+            
+                <!-- User Section -->
+                <h2>User Statistics</h2>
+                <div class="analytics">
+                    <div class="card">
+                        <div>Total Users</div>
+                        <span id="totalUsers">0</span>
+                    </div>
+                    <div class="card">
+                        <div>New Registrations</div>
+                        <span id="newUsers">0</span>
+                    </div>
+                    <div class="card">
+                        <div>Total Reviews</div>
+                        <span id="totalReviews">0</span>
+                    </div>
+                </div>
             </section>
+
             <section id="bookings" class="tab-content">
                 <h2>Bookings</h2>
-                <p>Manage bookings here.</p>
+                <div class="filter-container">
+                    <label for="status-filter">Filter by Status:</label>
+                    <select id="status-filter">
+                        <option value="all">All</option>
+                        <option value="success">Success</option>
+                        <option value="cancel">Cancel</option>
+                        <option value="refund">Refund</option>
+                    </select>
+                </div>
+                <div id="booking-list-container"></div>
             </section>
+
             <section id="users" class="tab-content">
                 <h2>Users</h2>
-                <p>View and manage users here.</p>
+                <div id="user-list-container">
+                    <!-- User cards will be dynamically added here -->
+                </div>
             </section>
-            <section id="queries" class="tab-content">
-                <h2>User Queries</h2>
-                <p>View user queries here.</p>
-            </section>
+
             <section id="hotel" class="tab-content">
                 <div class="filter-buttons">
                     <button data-filter="Phú Quốc">Phú Quốc</button>
                     <button data-filter="Nha Trang">Nha Trang</button>
-                    <button data-filter="Nam Hội An">Nam Hội An</button>
-                    <button data-filter="Hạ Long">Hạ Long</button>
                 </div>
 
                 <button id="add-hotel-button" class="add-button">Add Hotel</button>
@@ -90,20 +146,61 @@
                         </div>
                     </div>
                 </form>
+
+                <div id="modify-hotel-form" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="modifyModal.style.display='none'">&times;</span>
+                        <h2>Modify Hotel</h2>
+                        <form id="modify-form">
+                            <input type="hidden" id="modify-hotel-id">
+                            <label for="modify-name">Hotel Name:</label>
+                            <input type="text" id="modify-name" required>
+                
+                            <label for="modify-location">Location:</label>
+                            <input type="text" id="modify-location" required>
+                
+                            <label for="modify-location_filter">Location Filter:</label>
+                            <input type="text" id="modify-location_filter" required>
+                
+                            <label for="modify-phone">Phone:</label>
+                            <input type="text" id="modify-phone" required>
+                
+                            <label for="modify-price_per_night">Price per Night:</label>
+                            <input type="number" id="modify-price_per_night" required>
+                
+                            <label for="modify-currency">Currency:</label>
+                            <input type="text" id="modify-currency" required>
+                
+                            <label for="modify-imageUrl">Image URL:</label>
+                            <input type="url" id="modify-imageUrl" required>
+                
+                            <button type="submit">Update Hotel</button>
+                        </form>
+                    </div>
+                </div>
+                
                 
                 <div class = "item-card" > 
                     <div id="cardz-container" class="cardz">
                     </div>
                 </div>
             </section>
+
+
             <section id="rooms" class="tab-content">
-                <h2>Rooms</h2>
-                <p>Manage rooms here.</p>
+                <h2>Room Management</h2>
+                <div class="admin-controls">
+                    <select id="hotel-select">
+                        <option value="">Loading hotels...</option>
+                    </select>
+                    <input type="date" id="start-date">
+                    <input type="date" id="end-date">
+                    <button id="add-room-btn">Add Room</button>
+                </div>
+                <div id="room-list"></div>
             </section>
-            <section id="facilities" class="tab-content">
-                <h2>Features & Facilities</h2>
-                <p>Manage features and facilities here.</p>
-            </section>
+           
+
             <section id="chat" class="tab-content">
                 <div id="chat-app">
                     <!-- User List -->
@@ -130,13 +227,39 @@
                 
                 </div>
             </section>
-            <section id="settings" class="tab-content">
-                <h2>Settings</h2>
-                <p>Manage settings here.</p>
-            </section>
+    
         </main>
     </div>
-    <script src="admin.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".sidebar nav a");
+            const tabContents = document.querySelectorAll(".tab-content");
+            const activeTab = localStorage.getItem("activeTab") || "dashboard"; // Default to "dashboard"
+    
+            function showTab(tabName) {
+                tabContents.forEach(tab => tab.classList.remove("active"));
+                document.getElementById(tabName).classList.add("active");
+    
+                localStorage.setItem("activeTab", tabName);
+            }
+    
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const tabName = this.getAttribute("data-tab");
+                    showTab(tabName);
+                });
+            });
+    
+            // Show the last active tab on page load
+            showTab(activeTab);
+        });
+    </script>
+    <script src="hotel.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="manage_user.js"></script>
+    <script src="booking.js"></script>
+    <script src="room.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="chat.js"></script>
     

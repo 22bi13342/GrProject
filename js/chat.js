@@ -3,9 +3,19 @@ document.getElementById('chat-icon').addEventListener('click', () => {
     const chatWindow = document.getElementById('chat-window');
     if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
         chatWindow.style.display = 'flex';
-
-       
     } else {
+        chatWindow.style.display = 'none';
+    }
+});
+document.addEventListener('click', (event) => {
+    const chatWindow = document.getElementById('chat-window');
+    const chatIcon = document.getElementById('chat-icon');
+
+    if (
+        chatWindow.style.display === 'flex' &&
+        !chatWindow.contains(event.target) &&
+        !chatIcon.contains(event.target)
+    ) {
         chatWindow.style.display = 'none';
     }
 });

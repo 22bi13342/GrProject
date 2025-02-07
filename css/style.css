@@ -75,7 +75,7 @@ header {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #007bff;
+    background-color: orange;
     color: white;
     border-radius: 50%;
     width: 60px;
@@ -86,6 +86,7 @@ header {
     cursor: pointer;
     font-size: 24px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 200px;
 }
 
 #chat-window {
@@ -112,8 +113,9 @@ header {
 }
 
 #chat-messages {
+    margin-top: 50px;
     flex: 1;
-    padding: 50px;
+    padding: 20px;
     overflow-y: auto;
     background-color: #f1f1f1;
 }
@@ -126,14 +128,17 @@ header {
 }
 
 #chat-messages .sent {
-    background-color: #dcf8c6;
-    align-self: flex-end;
+    background-color: orange;
+    justify-content: flex-end;
     text-align: right;
+    width: fit-content;
+    margin-left: auto;
 }
 
 #chat-messages .received {
     background-color: #fff;
-    align-self: flex-start;
+    justify-content: flex-start;
+    width: fit-content;
 }
 
 #chat-input {

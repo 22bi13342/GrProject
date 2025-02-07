@@ -41,30 +41,6 @@
                 <div class="dropdown-btn" id="destination-btn">Choose Location</div>
                 <div class="dropdown-content" id="destination-options">
                     <div class="dropdown-group">
-                        <strong>Phú Quốc</strong>
-                        <p>Vinpearl Wonderworld Phú Quốc</p>
-                        <p>Vinpearl Resort & Spa Phú Quốc</p>
-                        <p>VinHolidays Fiesta Phú Quốc</p>
-                    </div>
-                    <div class="dropdown-group">
-                        <strong>Nha Trang</strong>
-                        <p>Vinpearl Resort & Spa Nha Trang Bay</p>
-                        <p>Vinpearl Luxury Nha Trang</p>
-                        <p>Vinpearl Resort Nha Trang</p>
-                        <p>Vinpearl Beachfront Nha Trang</p>
-                        <p>Hòn Tằm Resort</p>
-                    </div>
-                    <div class="dropdown-group">
-                        <strong>Hội An</strong>
-                        <p>Vinpearl Resort & Golf Nam Hội An</p>
-                    </div>
-                    <div class="dropdown-group">
-                        <strong>Đà Nẵng</strong>
-                        <p>Vinpearl Resort & Spa Đà Nẵng</p>
-                    </div>
-                    <div class="dropdown-group">
-                        <strong>Hạ Long</strong>
-                        <p>Vinpearl Resort & Spa Hạ Long</p>
                     </div>
                 </div>
             </div>
@@ -87,6 +63,23 @@
     </div>
 
     <div class="room-list" id="room-list"></div>
+
+    <!-- Room Detail Modal -->
+<div id="room-detail-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modal-room-name"></h2>
+        <div class="carousel-container">
+            <button class="carousel-prev" id="prev-btn">&#10094;</button>
+            <div id="modal-room-carousel" class="carousel"></div>
+            <button class="carousel-next" id="next-btn">&#10095;</button>
+        </div>
+        <p id="modal-room-description"></p>
+        <h3>Facilities</h3>
+        <ul id="modal-room-facilities"></ul>
+    </div>
+</div>
+
 
     <script src = "../js/script.js"></script>
     <script src = "../js/room.js"></script>

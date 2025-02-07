@@ -1,0 +1,77 @@
+.filter-container {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#status-filter {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Booking Card Container */
+#booking-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Individual Booking Card */
+.booking-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Room Image */
+.room-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Booking Details */
+.booking-card h3 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.booking-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+/* Status Styling */
+.booking-card p strong {
+    font-weight: bold;
+    color: #d35400; /* Orange for pending, customize based on status */
+}
+
+/* Refund Button */
+.refund-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.refund-btn:hover {
+    background-color: #c0392b;
+}

@@ -1,3 +1,5 @@
+let hotelData = [];
+
 document.querySelectorAll('.sidebar nav ul li a').forEach(link => {
     link.addEventListener('click', function(event) {
         event.preventDefault();
@@ -23,6 +25,7 @@ document.querySelectorAll('.sidebar nav ul li a').forEach(link => {
 fetch('/api/hotels') // Fetch data from the server API
     .then(response => response.json())
     .then(data => {
+        hotelData = data;
         const cardContainer = document.getElementById('cardz-container');
         const filterButtons = document.querySelectorAll('.filter-buttons button');
 
@@ -62,10 +65,22 @@ fetch('/api/hotels') // Fetch data from the server API
                             <p class="card-price">
                                 Giá Chỉ Từ <span>${hotel.price_per_night} ${hotel.currency}</span> /Đêm
                             </p>
-
                         </div>
+                        <div class="card-buttons">
+                            <button class="modify-hotel" data-id="${hotel.hotel_id}">Modify</button>
+                            <button class="remove-hotel" data-id="${hotel.hotel_id}">Remove</button>
+                        </div>
+
+                        
                     </div>`;
                 cardContainer.innerHTML += cardHTML;
+            });
+            document.querySelectorAll('.modify-hotel').forEach(button => {
+                button.addEventListener('click', openModifyModal);
+            });
+        
+            document.querySelectorAll('.remove-hotel').forEach(button => {
+                button.addEventListener('click', deleteHotel);
             });
         };
 
@@ -175,3 +190,111 @@ closeBtn.addEventListener('click', () => {
     hotelForm.reset();
     imagePreview.style.display = 'none';
 });
+
+const modifyModal = document.getElementById("modify-hotel-form");
+const modifyForm = document.getElementById("modify-form");
+
+// Function to open modify modal and pre-fill data
+function openModifyModal(event) {
+    const hotelId = event.target.dataset.id;
+    const hotel = hotelData.find(h => h.hotel_id == hotelId);
+
+    if (!hotel) return;
+
+    document.getElementById('modify-name').value = hotel.name;
+    document.getElementById('modify-location').value = hotel.location;
+    document.getElementById('modify-location_filter').value = hotel.location_filter;
+    document.getElementById('modify-phone').value = hotel.phone;
+    document.getElementById('modify-price_per_night').value = hotel.price_per_night;
+    document.getElementById('modify-currency').value = hotel.currency;
+    document.getElementById('modify-imageUrl').value = hotel.image;
+    document.getElementById('modify-hotel-id').value = hotel.hotel_id;
+
+    modifyModal.style.display = "block";
+}
+
+// Handle form submission for modifying hotel
+document.getElementById("modify-form").addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const hotelId = document.getElementById('modify-hotel-id').value;
+    const formData = {
+        name: document.getElementById('modify-name').value,
+        location: document.getElementById('modify-location').value,
+        location_filter: document.getElementById('modify-location_filter').value,
+        phone: document.getElementById('modify-phone').value,
+        price_per_night: document.getElementById('modify-price_per_night').value,
+        currency: document.getElementById('modify-currency').value,
+        image: document.getElementById('modify-imageUrl').value,
+    };
+
+    try {
+        const response = await fetch(`http://localhost:3000/admin/update_hotels/${hotelId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(result.message);
+            document.getElementById("modify-hotel-form").style.display = "none";
+            fetch('/api/hotels') // Refresh data after update
+                .then(response => response.json())
+                .then(data => {
+                    hotelData = data;
+                    renderCards();
+                });
+        } else {
+            alert(result.message || "Failed to update hotel.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    }
+});
+
+// Close modify modal when clicking outside
+window.addEventListener("click", (event) => {
+    if (event.target === modifyModal) {
+        modifyModal.style.display = "none";
+    }
+});
+
+async function deleteHotel(event) {
+    const hotelId = event.target.dataset.id;
+
+    console.log("Hotel ID:", hotelId); 
+
+    if (!hotelId) {
+        alert("Error: Hotel ID is missing.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to remove this hotel?")) return;
+
+    try {
+        const response = await fetch(`http://localhost:3000/admin/remove_hotels/${hotelId}`, {
+            method: 'DELETE',
+        });
+
+        const result = await response.json();
+        console.log("Delete response:", result);
+
+        if (result.success) {
+            alert(result.message);
+            fetch('/api/hotels') // Refresh data after deletion
+                .then(response => response.json())
+                .then(data => {
+                    hotelData = data;
+                    renderCards();
+                });
+        } else {
+            alert(result.message || "Failed to delete hotel.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    }
+}
